@@ -1,0 +1,285 @@
+[Class RegisterManager]
+package com.etm.view;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.etm.dao.EmployeeDao;
+import com.etm.entity.Employee;
+
+@WebServlet("/register")
+
+public class RegisterManager extends HttpServlet {
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+      String employeeName=req.getParameter("employee-name");
+      String employeeEmail=req.getParameter("employee-email");
+      String employeePassword=req.getParameter("employee-password");
+      String employeePhoneNumber=req.getParameter("employee-phonenumber");
+      String employeeSalary=req.getParameter("employee-salary");
+      
+      //conversion-parsing
+      long employeePhoneNumberLong=Long.parseLong(employeePhoneNumber);
+      double employeeSalaryDouble=Double.parseDouble(employeeSalary);
+      
+      //set it to employee object
+      Employee employee=new Employee();
+      employee.setEmail(employeeEmail);
+      employee.setEmployeeName(employeeName);
+      employee.setPassword(employeePassword);
+      employee.setPhoneNumber(employeePhoneNumberLong);
+      employee.setSalary(employeeSalaryDouble);
+      employee.setRole("manager");
+      
+      EmployeeDao employeeDao=new EmployeeDao();
+      employeeDao.saveEmployee(employee);
+      PrintWriter printWriter=resp.getWriter();
+      printWriter.print("<h1>Manager Data Stored!..<h1>");
+      
+}
+}
+_____________________________________________________________________________________
+[Class LoginEmployee]
+
+package com.etm.view;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.etm.dao.EmployeeDao;
+import com.etm.entity.Employee;
+
+@WebServlet("/Login")
+public class LoginEmployee extends HttpServlet {
+  
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException {
+	String employeeEmail=req.getParameter("employee-email");
+	String employeePassword=req.getParameter("employee-password");
+	
+	EmployeeDao employeeDao=new EmployeeDao();
+	Employee dbEmployee=employeeDao.findEmployeeByEmailAndPassword(employeeEmail, employeePassword);
+	PrintWriter printWriter=resp.getWriter();{
+	if(dbEmployee!=null) {
+		printWriter.print("<h1>Login Success</h1>");
+		//validate role
+		String role=dbEmployee.getRole();
+		if(role.equals("manager")){
+			RequestDispatcher requestDispatcher=req.getRequestDispatcher("manager.html");
+			requestDispatcher.include(req, resp);
+		}
+	}
+	else {
+		printWriter.print("<h1>Login Failure</h1>");
+	}
+	
+	}
+	}
+}
+_____________________________________________________________________________________
+[Class AddDeveloper]
+
+package com.etm.view;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.etm.dao.EmployeeDao;
+import com.etm.entity.Employee;
+
+@WebServlet("/add-developer")
+public class AddDeveloper extends HttpServlet{
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+	      String employeeName=req.getParameter("employee-name");
+	      String employeeEmail=req.getParameter("employee-email");
+	      String employeePassword=req.getParameter("employee-password");
+	      String employeePhoneNumber=req.getParameter("employee-phonenumber");
+	      String employeeSalary=req.getParameter("employee-salary");
+	      
+	      //conversion-parsing
+	      long employeePhoneNumberLong=Long.parseLong(employeePhoneNumber);
+	      double employeeSalaryDouble=Double.parseDouble(employeeSalary);
+	      
+	      //set it to employee object
+	      Employee employee=new Employee();
+	      employee.setEmail(employeeEmail);
+	      employee.setEmployeeName(employeeName);
+	      employee.setPassword(employeePassword);
+	      employee.setPhoneNumber(employeePhoneNumberLong);
+	      employee.setSalary(employeeSalaryDouble);
+	      employee.setRole("manager");
+	      
+	      EmployeeDao employeeDao=new EmployeeDao();
+	      employeeDao.saveEmployee(employee);
+	      PrintWriter printWriter=resp.getWriter();
+	      printWriter.print("<h1>Developer Data Stored!..<h1>");
+	      
+	}
+	}
+	_____________________________________________________________________________________________
+[class CreateTask]
+
+package com.etm.view;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.etm.dao.TaskDao;
+import com.etm.entity.Status;
+import com.etm.entity.Task;
+
+@WebServlet("/createTask")
+public class CreateTask extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String taskName=req.getParameter("task-name");
+		int duration=Integer.parseInt(req.getParameter("duration"));
+		
+		Task task=new Task();
+		task.setDuration(duration);
+		task.setTaskName(taskName);
+		task.setStatus(Status.CREATED);
+		
+		TaskDao taskDao=new TaskDao();
+		taskDao.saveTask(task);
+		
+		PrintWriter printWriter=resp.getWriter();
+		printWriter.print("<h1>Task Created!..</h1>");
+		super.doGet(req, resp);
+	}
+}
+_____________________________________________________________________________________________________
+
+[class AssignTask]
+package com.etm.view;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.etm.dao.EmployeeDao;
+import com.etm.dao.TaskDao;
+import com.etm.entity.Employee;
+import com.etm.entity.Status;
+import com.etm.entity.Task;
+
+@WebServlet("/assignTask")
+
+public class AssignTask extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int developerId=Integer.parseInt(req.getParameter("developer-id"));
+		int taskId=Integer.parseInt(req.getParameter("task-id"));
+		
+		//fetch both object
+		EmployeeDao employeeDao = new EmployeeDao();
+		Employee dbEmployee = employeeDao.findEmployeeById(developerId);
+		
+		TaskDao taskDao=new TaskDao();
+		Task dbTask = taskDao.findTaskById(taskId);
+		dbTask.setStatus(Status.ASSIGNED);
+		
+		//set the task to the employee
+		//fetch old list of task for employee
+		List<Task> taskList = dbEmployee.getTasks();
+		if(taskList==null) {
+			taskList=new ArrayList<Task>();
+		}
+		//add current task to list
+		taskList.add(dbTask);
+		
+		//set the list to employee
+		dbEmployee.setTasks(taskList);
+		
+		//update employee
+		employeeDao.updateEmployee(dbEmployee);
+		
+		PrintWriter printWriter=resp.getWriter();
+		printWriter.print("<h1>Task Assigned!..</h1>");
+		super.doGet(req, resp);
+	}
+	
+}
+____________________________________________________________________________________________________
+[Class DisplayAllDevelopers]
+
+package com.etm.view;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.Session;
+
+import com.etm.dao.EmployeeDao;
+import com.etm.entity.Employee;
+
+@WebServlet("/viewDeveloper")
+public class DisplayAllDevelopers extends HttpServlet {
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		
+		EmployeeDao employeeDao = new EmployeeDao();
+		List<Employee>allDeveloper = employeeDao.findAllDeveloper();
+		
+		req.setAttribute("allData", allDeveloper);
+		RequestDispatcher requestDispatcher = req.getRequestDispatcher("displayDeveloper.jsp");
+		requestDispatcher.forward(req, resp);
+    }
+
+
+}	        
+
+
+
+
+	
