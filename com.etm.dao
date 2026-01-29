@@ -1,0 +1,142 @@
+[Class EmployeeDao]
+package com.etm.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import com.etm.entity.Employee;
+
+public class EmployeeDao {
+	
+	EntityManager entityManager=Persistence.createEntityManagerFactory("vikas").createEntityManager();
+	EntityTransaction entityTransaction=entityManager.getTransaction();
+    
+	public Employee saveEmployee(Employee employee) {
+		entityTransaction.begin();
+		entityManager.persist(employee);
+		entityTransaction.commit();
+		return employee;
+	}
+	public Employee updateEmployee(Employee employee) {
+		entityTransaction.begin();
+		entityManager.merge(employee);
+		entityTransaction.commit();
+		return employee;
+	}
+	public Employee deleteEmployee(Employee employee) {
+		entityTransaction.begin();
+		entityManager.merge(employee);
+		entityTransaction.commit();
+		return employee;
+	}
+	public Employee findEmployeeById(int employeeId) {
+		return entityManager.find(Employee.class, employeeId);
+	}
+	public List<Employee> findAllEmployee(){
+		Query query = entityManager.createQuery("select e from Employee e");
+		List<Employee> list = query.getResultList();
+		if(list!=null) {
+			return list;
+		}
+		else
+			return null;
+	}	
+	public List<Employee> findAllDeveloper(){
+		Query query = entityManager.createQuery("select e from Employee e where e.role='developer'");
+		List<Employee> list = query.getResultList();
+		if(list!=null) {
+			return list;
+		}
+		else
+			return null;
+	}
+	public Employee findEmployeeByEmailAndPassword(String email,String password) {
+	Query query = entityManager.createQuery("select e from Employee e where e.email=?1 and e.password=?2");
+	query.setParameter(1, email);
+	query.setParameter(2, password);
+	List<Employee>list =query.getResultList();
+	if(list.size()>0)
+		return list.get(0);
+	else
+		return null;
+	
+ }
+}
+______________________________________________________________________________________________________________________________________________________________
+[Class TaskDao]
+package com.etm.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import com.etm.entity.Employee;
+import com.etm.entity.Task;
+
+public class TaskDao {
+	EntityManager entityManager=Persistence.createEntityManagerFactory("vikas").createEntityManager();
+	EntityTransaction entityTransaction=entityManager.getTransaction();
+    
+	public Employee saveEmployee(Employee employee) {
+		entityTransaction.begin();
+		entityManager.persist(employee);
+		entityTransaction.commit();
+		return employee;
+	}
+	public Employee updateEmployee(Employee employee) {
+		entityTransaction.begin();
+		entityManager.merge(employee);
+		entityTransaction.commit();
+		return employee;
+	}
+	public Employee deleteEmployee(Employee employee) {
+		entityTransaction.begin();
+		entityManager.merge(employee);
+		entityTransaction.commit();
+		return employee;
+	}
+	public Task saveTask(Task task) {
+		entityTransaction.begin();
+		entityManager.persist(task);
+		entityTransaction.commit();
+		return task;
+		
+	}
+	public Task findTaskById(int taskId) {
+		return entityManager.find(Task.class, taskId);
+	}
+	public Employee findEmployeeById(int employeeId) {
+		return entityManager.find(Employee.class, employeeId);
+	}
+	public List<Employee> findAllEmployee(){
+		Query query = entityManager.createQuery("select e from Employee e");
+		List<Employee> list = query.getResultList();
+		if(list!=null) {
+			return list;
+		}
+		else
+			return null;
+	}	
+	public Employee findEmployeeByEmailAndPassword(String email,String password) {
+	Query query = entityManager.createQuery("select e from Employee where e.email=?1 and e.password=?2");
+	query.setParameter(1, email);
+	query.setParameter(2, password);
+	List<Employee>list =query.getResultList();
+	if(list.size()>0)
+		return list.get(0);
+	else
+		return null;
+	
+ }
+}
+
+
+
+
