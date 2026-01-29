@@ -1,0 +1,175 @@
+[register.html]
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="register">
+ENTER NAME <input type="text" name="employee-name"><br><br>
+ENTER EMAIL <input type="text" name="employee-email"><br><br>
+ENTER PASSWORD <input type="text" name="employee-password"><br><br>
+ENTER PHONENUMBER <input type="text" name="employee-phonenumber"><br><br>
+ENTER SALARY <input type="text" name="employee-salary"><br><br>
+<input type="submit" value="REGISTER">
+</form>
+</body>
+</html>
+______________________________________________________________________________________________
+[manager.html]
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2><a href="addDeveloper.html">Add-Devloper</a></h2>
+<h2><a href="createTask.html">Create-Task</a></h2>
+<h2><a href="assignTask.html">AssignTask</a></h2>
+<h2><a href="viewDeveloper.html">ViewAllDeveloperWithTask</a></h2>
+<h2><a href="">DeleteDeveloper</a></h2>
+</body>
+</html>
+______________________________________________________________________________________________
+[Login.html]
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="Login">
+Enter EMAIL<input type="text" name="employee-email"><br><br>
+Enter PASSWORD<input type="text" name="employee-password"><br><br>
+<input type="submit" value="Login"><br>
+</form>
+<h3><a href="takeEmail.html">ForgotPassword?</a>
+<a href="register.html">NewUser?</a></h3>
+
+</body>
+</html>
+______________________________________________________________________________________________
+[addDeveloper.html]
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="add-developer">
+ENTER NAME <input type="text" name="employee-name"><br><br>
+ENTER EMAIL <input type="text" name="employee-email"><br><br>
+ENTER PASSWORD <input type="text" name="employee-password"><br><br>
+ENTER PHONENUMBER <input type="text" name="employee-phonenumber"><br><br>
+ENTER SALARY <input type="text" name="employee-salary"><br><br>
+<input type="submit" value="ADD-DEVELOPER">
+
+</form>
+</body>
+</html>
+_______________________________________________________________________________________________
+[createTask.html]
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="createTask">
+ENTER TASK NAME:<input type="text" name="task-name"><br><br>
+DURATION : <input type="text" name="duration"><br><br>
+<input type="submit" value="CREATE">
+
+</form>
+</body>
+</html>
+________________________________________________________________________________________________
+[assignTask.html]
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="assignTask">
+ENTER Developer ID :<input type="text" name="developer-id">
+ENTER Task ID :<input type="text" name="task-id"><br><br>
+<input type="submit" value="ASSIGN">
+
+</form>
+
+</body>
+</html>
+_________________________________________________________________________________________________
+[viewDeveloper.html]
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="viewDeveloper" method="get">
+   <button type="submit">Display All Developers</button>
+</form>
+</body>
+</html>
+________________________________________________________________________________________________
+[index.jsp]
+
+<html>
+<body>
+<h2><%="Welcome To Employee Task Management" %></h2>
+<h3><a href="register.html">Register</a></h3>
+<h3><a href="login.html">Login</a></h3>
+</body>
+</html>
+________________________________________________________________________________________________
+[displayDeveloper.jsp]
+
+<%@page import="com.etm.entity.Task"%>
+<%@page import="com.etm.entity.Employee"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+List<Employee> list=(List<Employee>)request.getAttribute("allData");
+for(Employee employee : list){
+%>
+<h1><%=employee.getEmployeeId() %> <%=employee.getEmployeeName() %>
+<%=employee.getEmail() %><%=employee.getPhoneNumber() %>
+<%=employee.getSalary() %>
+</h1>
+<%
+List<Task> taskList=employee.getTasks();
+if(taskList!=null){
+	for(Task task :taskList)
+	{
+%>
+<h1><%=task.getTaskId() %><%=task.getTaskName() %> <%=task.getDuration() %></h1>
+<% 
+}
+}
+}
+%>
+</body>
+</html>
